@@ -3,6 +3,7 @@ const mongoose = require ('mongoose');
 const bodyParser = require ('body-parser');
 
 const customerRouter = require ('./routes/signupRouter');
+const postRouter = require ('./routes/postRoutes');
 
 const app = express ();
 app.use (express.json ());
@@ -16,6 +17,7 @@ app.get ('/', (req, res) => {
 
 // app.use("/user", router);
 app.use('/api', customerRouter);
+app.use ('/api/posts', postRouter);
 
 //DATA_BASE COLLECTION
 mongoose.connect ('mongodb://127.0.0.1:27017/exam-post');
