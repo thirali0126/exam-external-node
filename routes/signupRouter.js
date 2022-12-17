@@ -2,6 +2,7 @@ const express = require ('express');
 const bcrypt = require ('bcrypt');
 const signupModel = require ('../models/signupModel');
 let router = express.Router ();
+var jwt = require ('jsonwebtoken');
 
 router.post ('/signup', async (req, res) => {
   const user = req.body;
@@ -41,27 +42,29 @@ router.post ('/signup', async (req, res) => {
       });
   });
 });
-// router.post ('/signin', async (req, res) => {
-//   const user = req.body;
-//   if (!user.email && !user.password) {
-//     return res.status (201).json ({data: 'Kindly fill the details first'});
-//   }
-//   const isemailExists = await signupModel.findOne ({email: user.email});
-//   if (isemailExists) {
-//     bcrypt
-//       .compare (user.password, isemailExists.password)
-//       .then (function (result) {
-//         if (result == true) {
-//           var token = jwt.sign ({_id: isemailExists._id}, 'my-token');
-//           return res.status (200).json ({data: 'Login sucessfully..', token});
-//         } else {
-//           return res
-//             .status (400)
-//             .json ({data: 'user email/Password incorrect..'});
-//         }
-//       });
-//   } else {
-//     return res.status (400).json ({data: 'user email incorrect..'});
-//   }
-// });
+
+router.post ('/signin', async (req, res) => {
+  const user = req.body;
+  if (!user.email && !user.password) {
+    return res.status (201).json ({data: 'Kindly fill the details first'});
+  }
+  const isemailExists = await signupModel.findOne ({email: user.email});
+  if (isemailExists) {
+    bcrypt
+      .compare (user.password, isemailExists.password)
+      .then (function (result) {
+        if (result == true) {
+          var token = jwt.sign ({_id: isemailExists._id}, 'my-token');
+          return res.status (200).json ({data: 'Login sucessfully..', token});
+        } else {
+          return res
+            .status (400)
+            .json ({data: 'user email/Password incorrect..'});
+        }
+      });
+  } else {
+    return res.status (400).json ({data: 'Please Sign up'});
+  }
+});
+
 module.exports = router;
