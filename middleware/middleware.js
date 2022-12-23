@@ -13,6 +13,7 @@ console.log(auth);
         console.log("err",err)
         // decoded undefined
         console.log("decoded",decoded)
+        next()
         if(err){
             return res.status(409).json({ data: err });
         }
